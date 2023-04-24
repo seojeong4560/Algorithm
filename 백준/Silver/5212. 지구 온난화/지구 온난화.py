@@ -30,15 +30,18 @@ for x in range(R):
                 new_arr[x][y] = '.'
                 land_cnt -= 1
 
+# 섬은 적어도 하나가 있다
 if land_cnt == 0:
     print('X')
 else:
     startR = 0
     endR = 0
+
     for i in range(R):
         if 'X' in new_arr[i]:
             startR = i
             break
+        
     for i in range(R-1, -1, -1):
         if 'X' in new_arr[i]:
             endR = i
