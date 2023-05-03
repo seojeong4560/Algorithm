@@ -1,49 +1,38 @@
-N = int(input())        # 스위치의 개수
-N_list = [2] + list(map(int, input().split()))      # 앞에 [2]를 추가해 준 것은 나중에 여학생의 경우 대칭을 검증하기 위해서임
-M = int(input())        # 학생수
-M_arr = [list(map(int, input().split())) for _ in range(M)]
+def change(num):
+    if switch[num] == 0:
+        switch[num] = 1
+    else:
+        switch[num] = 0
+    return
 
-for i in range(M):
-    if M_arr[i][0] == 1:        # 남이면 배수 상태로 바꿔주기
-        for a in range(1, N+1):
-            if a % M_arr[i][1] == 0:                # 배수이면
-                if N_list[a] == 1:
-                    N_list[a] = 0
-                else:
-                    N_list[a] = 1
+# 스위치의 개수
+N = int(input())
 
-    elif M_arr[i][0] == 2:      # 여이면 대칭으로 상태 바꾸기
-        m = M_arr[i][1]
-        if N_list[m] == 1:
-            N_list[m] = 0
-            for a in range(1, N - m + 1):
-                if N_list[m - a] == N_list[m + a] == 1:
-                    N_list[m - a] = N_list[m + a] = 0
+# 스위치 
+# 스위치 번호가 1번부터 시작해서 앞에 [-1] 추가
+switch = [-1] + list(map(int, input().split()))
 
-                elif N_list[m - a] == N_list[m + a] == 0:
-                    N_list[m - a] = N_list[m + a] = 1
+students = int(input())
 
-                else:
-                    break
+for _ in range(students):
+    sex, num = map(int, input().split())
+    # 남자
+    if sex == 1:
+        for i in range(num, N+1, num):
+            change(i)
 
-        elif N_list[m] == 0:
-            N_list[m] = 1
-            for a in range(1, N - m + 1):
-                if N_list[m - a] == N_list[m + a] == 1:
-                    N_list[m - a] = N_list[m + a] = 0
-
-                elif N_list[m - a] == N_list[m + a] == 0:
-                    N_list[m - a] = N_list[m + a] = 1
-
-                else:
-                    break
-
-# 출력: 한줄에 20개씩 출력
-count = 0
+    # 여자
+    else:
+        change(num)
+        for a in range(N//2):
+            if num + a > N or num - a < 1: break
+            if switch[num+a] == switch[num-a]:
+                change(num+a)
+                change(num-a)
+            else:
+                break
+            
 for i in range(1, N+1):
-    print(N_list[i], end = ' ')
-    count += 1
-
-    if count == 20:
+    print(switch[i], end=" ")
+    if i % 20 == 0:
         print()
-        count = 0
